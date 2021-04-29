@@ -1,0 +1,33 @@
+apiVersion: skaffold/v2beta10
+kind: Config
+build:
+  cluster: {}
+  artifacts:
+    - image: reg.istry.cz/skaffold-demo
+      kaniko:
+        cache:
+          repo: reg.istry.cz/kaniko-cache/skaffold-demo
+      context: ./skaffold-demo
+    - image: reg.istry.cz/foobar
+      kaniko:
+        cache:
+          repo: reg.istry.cz/kaniko-cache/foobar
+      context: ./foobar
+deploy:
+  # kubectl:
+  #   manifests:
+  #     - k8s/*
+  helm:
+    releases:
+      - name: demo
+        chartPath: ./charts/skaffold-demo
+        artifactOverrides:
+          image: reg.istry.cz/skaffold-demo
+        valuesFiles:
+          - ./.helm-values/skaffold-demo.dev.yml
+      - name: demo2
+        chartPath: ./charts/skaffold-demo
+        artifactOverrides:
+          image: reg.istry.cz/skaffold-demo
+        setValues:
+          host: foo.skaff.sikademo.com

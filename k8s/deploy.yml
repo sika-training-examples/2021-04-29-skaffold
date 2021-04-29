@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: skaffold-demo
+  labels:
+    release: skaffold-demo
+spec:
+  selector:
+    matchLabels:
+      release: skaffold-demo
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        release: skaffold-demo
+    spec:
+      containers:
+        - name: skaff
+          image: reg.istry.cz/skaffold-demo
+          ports:
+            - name: http
+              containerPort: 80
+          readinessProbe:
+            periodSeconds: 10
+            httpGet:
+              path: /readyz
+              port: http
+          resources:
+            requests:
+              cpu: 10m
+              memory: 10Mi
+            limits:
+              cpu: 20m
+              memory: 20Mi

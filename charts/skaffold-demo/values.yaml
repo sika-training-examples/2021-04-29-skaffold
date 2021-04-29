@@ -1,0 +1,3 @@
+# Optional
+replicas: 1
+image: reg.istry.cz/skaffold-demo
